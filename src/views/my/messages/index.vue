@@ -77,9 +77,10 @@
                     this.hideList = data.has_read_messages
                     if (this.tab === 1) {
                         this.switchList()
+                    } else {
+                        this.$http.post('/api/v1/message/mark_all') // 标记全部为已读
                     }
                 })
-                // this.$http.post('/api/v1/message/mark_all') //标记全部为已读
             }
         }
     }
