@@ -12,13 +12,36 @@ const scrollTop = (el, value) => {
     }
 }
 
-const scroll = () => { // 监听滚动条改变事件
+// const throttle = (action, delay) => { // 节流
+//     let last = 0
+//     return function() {
+//         const curr = +new Date()
+//         if (curr - last > delay) {
+//             action.apply(this, arguments)
+//             last = curr
+//         }
+//     }
+// }
+
+const debounce = (action, delay) => { // 防抖
+    let timer = null
+    return function() {
+        let [context, args] = [this, arguments]
+        clearTimeout(timer)
+        timer = setTimeout(function() {
+            action.apply(context, args)
+        }, delay)
+    }
+}
+
+const scroll = debounce(function(event) { // 监听滚动条改变事件
     const { target: { __url } } = event
     if (__url) {
         const top = scrollTop(event.target)
         store.setItem(__url, top)
     }
-}
+}, 1000)
+
 export const scrollRecord = {
     inserted(el, binding, vnode) {
         const init = (to) => {
